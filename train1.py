@@ -219,29 +219,6 @@ def main(train_loader, val_loader, EPOCHS):
 if __name__ == '__main__':
     train_epochs = 30
     MAX_LABEL_LENGTH = 120
-    vsamples = load_samples([R"F:/ocrdatas/uigs_val.txt",R"F:/chaghatayocr/chg_test.txt",R"F:/ocrdatas/ug_val.txt"],max_len=MAX_LABEL_LENGTH)
-
-    tsamples = load_samples([R"F:/chaghatayocr/chg_train.txt",R"F:/ocrdatas/ug_train.txt",R'F:/chaghatayocr/chgdatas/chgs_train.txt'],max_len=MAX_LABEL_LENGTH)
-
-    ugsamples = load_samples([R"F:/ocrdatas/uigs_train.txt"],max_len=MAX_LABEL_LENGTH)
-    ugsample = ugsamples[:int(len(ugsamples)*0.1)]
-    tsamples.extend(ugsample)
-        
-    print(f"     Train Samlpes: {len(tsamples)}")
-    print(f"Validation Samlpes: {len(vsamples)}")
-
-    batch_size = 36
-    # train_loader = DataLoader(OCRDataset(tsamples, train=True), batch_size=batch_size, shuffle=True,  num_workers=4, pin_memory=True, collate_fn=collate_fn)
-    # val_loader = DataLoader(OCRDataset(vsamples, train=False), batch_size=batch_size*2, shuffle=False,  num_workers=4, pin_memory=True, collate_fn=collate_fn)
-
-
-    tdset = OCRDataset(tsamples, train=True)
-    tsampler = BucketBatchSampler(tdset.widths, width_budget=batch_size * 1600)
-    train_loader = DataLoader(tdset, batch_sampler=tsampler, collate_fn=collate_fn, num_workers=4,pin_memory=True)
-
-    vdset = OCRDataset(vsamples, train=False)
-    vsampler = BucketBatchSampler(vdset.widths, width_budget=batch_size*2 * 1600)
-    val_loader = DataLoader(vdset, batch_sampler=vsampler, collate_fn=collate_fn, num_workers=4,pin_memory=True)
 
     main(train_loader, val_loader, train_epochs)
     torch.cuda.empty_cache()
